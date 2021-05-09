@@ -126,7 +126,7 @@ on_client_connected(#{clientid := ClientId, username := Username, peerhost := Pe
         ipaddress => iolist_to_binary(ntoa(Peerhost)),
         keepalive => maps:get(keepalive, ConnInfo),
         proto_ver => maps:get(proto_ver, ConnInfo),
-        connected_at => maps:get(connected_at, ConnInfo)
+        connected_at => emqx_time:now_ms(maps:get(connected_at, ConnInfo))
     },
     amqp_pub(Env, Params),
     ok;
