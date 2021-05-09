@@ -11,7 +11,6 @@
 -author("derry6").
 
 -include("emqx_rabbit_hook.hrl").
--include_lib("emqx/include/logger.hrl").
 -include_lib("amqp_client/include/amqp_client.hrl").
 -include_lib("amqp_client/include/amqp_client_internal.hrl").
 
@@ -49,7 +48,7 @@ parse_rule([{Rule, Conf} | Rules], Acc) ->
   Routing = proplists:get_value(<<"routing">>, Params, list_to_binary(Rule)),
   Filter = proplists:get_value(<<"topic">>, Params),
   Env = #{type => Type, exchange => Exchange, routing => Routing, filter => Filter},
-  ?LOG(info, "Rule: ~p  type=~p, exchange=~p, routing=~p, filter=~p", [Rule, Type, Exchange, Routing, Filter]),
+  io:format("Rule: ~p  type=~p, exchange=~p, routing=~p, filter=~p", [Rule, Type, Exchange, Routing, Filter]),
   parse_rule(Rules, [{list_to_atom(Rule), Env} | Acc]).
 
 

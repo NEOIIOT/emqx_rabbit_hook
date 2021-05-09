@@ -1,4 +1,3 @@
-
 -define(APP, emqx_rabbit_hook).
 
 -record(pub_rule, {

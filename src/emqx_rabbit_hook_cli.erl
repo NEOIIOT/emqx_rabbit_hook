@@ -6,19 +6,18 @@
 -include("emqx_rabbit_hook.hrl").
 
 -include_lib("amqp_client/include/amqp_client.hrl").
--include_lib("emqx/include/logger.hrl").
 
 -export([connect/1, ensure_exchange/2, pub/3]).
 
 connect(Opts) ->
   {ok, Params} = emqx_rabbit_hook_env:rabbit_params(Opts),
-  ?LOG(info, "Connecting ~p", [Params]),
+  io:format("Connecting ~p", [Params]),
   case amqp_connection:start(Params) of
     {ok, Conn} ->
-      ?LOG(info, "Connected: ~p", [Conn]),
+      io:format("Connected: ~p", [Conn]),
       {ok, Conn};
     {error, Error} ->
-      ?LOG(error, "Can't connect to mqtt broker: ~p", [Error]),
+      io:format("Can't connect to mqtt broker: ~p", [Error]),
       {error, Error}
   end.
 
@@ -47,7 +46,7 @@ pub(Exchange, RoutingKey, Payload) ->
         #'basic.publish'{exchange = Exchange, routing_key = RoutingKey},
         #amqp_msg{props = #'P_basic'{delivery_mode = 2}, payload = Payload}
       ),
-      ?LOG(debug, "Message published, exchange = ~p, routing = ~p", [Exchange, RoutingKey]),
+      io:format("Message published, exchange = ~p, routing = ~p", [Exchange, RoutingKey]),
       ok = amqp_channel:close(Channel),
       ok
     end
