@@ -15,8 +15,8 @@ hook.rabbit.username = learn_emqx
 hook.rabbit.password = learn_emqx
 hook.rabbit.heartbeat = 10
 hook.rabbit.auto_reconnect = 1
-# hook.rabbit.ssl_opts = ""
 hook.rabbit.pool_size = 10
+# hook.rabbit.ssl_enabled = off
 
 ＃　转发规则配置
 # type: RabbitMQ 交换机类型

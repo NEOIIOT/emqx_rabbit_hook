@@ -25,22 +25,11 @@
 end}.
 
 %% =================== SSL configs ========================
-{mapping, "hook.rabbit.ssl.cacertfile", "emqx_rabbit_hook.ssl_opts", [{datatype, string}]}.
-{mapping, "hook.rabbit.ssl.certfile", "emqx_rabbit_hook.ssl_opts", [{datatype, string}]}.
-{mapping, "hook.rabbit.ssl.keyfile", "emqx_rabbit_hook.ssl_opts", [{datatype, string}]}.
-{mapping, "hook.rabbit.ssl.verify", "emqx_rabbit_hook.ssl_opts", [{datatype, atom}]}.
-
-{translation, "emqx_rabbit_hook.ssl_opts", fun(Conf) ->
-    Filter = fun(L) -> [{K, V} || {K, V} <- L, V =/= undefined] end,
-    SslOpts = Filter([
-            {cacertfile, cuttlefish:conf_get("hook.rabbit.ssl.cacertfile", Conf, undefined)},
-            {certfile, cuttlefish:conf_get("hook.rabbit.ssl.certfile", Conf, undefined)},
-            {keyfile, cuttlefish:conf_get("hook.rabbit.ssl.keyfile", Conf, undefined)},
-            {verify, cuttlefish:conf_get("hook.rabbit.ssl.verify", Conf, undefined)}
-        ]),
-    SslOpts
-end}.
-
+{mapping, "hook.rabbit.ssl_enabled", "emqx_rabbit_hook.ssl_enabled", [{default, off}, {datatype, flag} ]}.
+{mapping, "hook.rabbit.ssl_cacertfile", "emqx_rabbit_hook.ssl_cacertfile", [{default, ""}, {datatype, string} ]}.
+{mapping, "hook.rabbit.ssl_certfile", "emqx_rabbit_hook.ssl_certfile", [{default, ""}, {datatype, string} ]}.
+{mapping, "hook.rabbit.ssl_keyfile", "emqx_rabbit_hook.ssl_keyfile", [{default, ""}, {datatype, string} ]}.
+{mapping, "hook.rabbit.ssl_verify_peer", "emqx_rabbit_hook.ssl_verify_peer", [{default, off}, {datatype, flag} ]}.
 
 %% =================== Pool Configs ========================
 {mapping, "hook.rabbit.payload_encoding", "emqx_rabbit_hook.payload_encoding", [{default, undefined}, {datatype, {enum, [bson, json]}}]}.

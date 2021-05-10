@@ -69,7 +69,7 @@ load() ->
     ).
 
 unload() ->
-    io:format("AMQP plugin unloaded"),
+    io:format("AMQP plugin unloaded~n"),
     lists:foreach(
         fun({Hook, _Type, _Exchange, _Routing}) ->
             unload_(Hook)
@@ -249,7 +249,7 @@ on_session_terminated(#{clientid := ClientId, username := Username}, Reason, _Se
     amqp_pub(Env, Params),
     ok;
 on_session_terminated(#{}, Reason, _SessInfo, _Env) ->
-    io:format("Session terminated, cannot encode the " "reason: ~p", [Reason]),
+    io:format("Session terminated, cannot encode the " "reason: ~p~n", [Reason]),
     ok.
 
 %%--------------------------------------------------------------------

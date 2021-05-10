@@ -30,7 +30,7 @@ rabbit_params(Opts) ->
     channel_max = proplists:get_value(channel_max, Opts),
     frame_max = proplists:get_value(frame_max, Opts),
     connection_timeout =  proplists:get_value(connection_timeout, Opts),
-    ssl_options = application:get_env(?APP, ssl_opts, [])
+    ssl_options = get_ssl_options(application:get_env(?APP, ssl_enabled, off))
   },
   {ok, Params}.
 
@@ -48,8 +48,19 @@ parse_rule([{Rule, Conf} | Rules], Acc) ->
   Routing = proplists:get_value(<<"routing">>, Params, list_to_binary(Rule)),
   Filter = proplists:get_value(<<"topic">>, Params),
   Env = #{type => Type, exchange => Exchange, routing => Routing, filter => Filter},
-  io:format("Rule: ~p  type=~p, exchange=~p, routing=~p, filter=~p", [Rule, Type, Exchange, Routing, Filter]),
+  io:format("Rule: ~p  type=~p, exchange=~p, routing=~p, filter=~p~n", [Rule, Type, Exchange, Routing, Filter]),
   parse_rule(Rules, [{list_to_atom(Rule), Env} | Acc]).
 
 
 payload_encoding() -> application:get_env(?APP, encode_payload, undefined).
+get_ssl_options(Enabled) when Enabled == on ->
+  Opts = [
+    {cacertfile, application:get_env(?APP, ssl_cacertfile, "")},
+    {certfile, application:get_env(?APP, ssl_certfile, "")},
+    {keyfile, application:get_env(?APP, ssl_keyfile, "")}
+  ],
+  case application:get_env(?APP, ssl_verify_peer, off) of
+    on -> [{verify, verify_peer} | Opts];
+    _ -> Opts
+  end;
+get_ssl_options(_) -> none.
